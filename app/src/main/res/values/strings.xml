@@ -1,9 +1,10 @@
 <resources>
     <string name="app_name">My Shop List</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="name">Name</string>
     <string name="count">count</string>
     <string name="add">ADD</string>
     <string name="save">save</string>
+    <string name="name_error">name is incorrect</string>
+    <string name="count_error">count is incorrect</string>
+    <string name="add_shop_item">add shop item</string>
 </resources>

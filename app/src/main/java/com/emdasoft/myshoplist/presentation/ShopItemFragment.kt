@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import com.emdasoft.myshoplist.R
 import com.emdasoft.myshoplist.databinding.FragmentShopItemBinding
 
 class ShopItemFragment : Fragment() {
@@ -68,7 +69,7 @@ class ShopItemFragment : Fragment() {
 
         viewModel.showErrorNameInput.observe(viewLifecycleOwner) {
             if (it) {
-                val message = "name is incorrect"
+                val message = getString(R.string.name_error)
                 binding.tilName.error = message
             } else {
                 binding.tilName.error = null
@@ -77,7 +78,7 @@ class ShopItemFragment : Fragment() {
 
         viewModel.showErrorCountInput.observe(viewLifecycleOwner) {
             if (it) {
-                val message = "count is incorrect"
+                val message = getString(R.string.count_error)
                 binding.tilCount.error = message
             } else {
                 binding.tilCount.error = null
@@ -130,7 +131,6 @@ class ShopItemFragment : Fragment() {
     companion object {
 
         private const val UNDEFINE_ID = -1
-
         private const val ITEM_ID_KEY = "item_id"
         private const val SCREEN_MODE = "screen_mode"
         private const val MODE_ADD = "add_mode"
