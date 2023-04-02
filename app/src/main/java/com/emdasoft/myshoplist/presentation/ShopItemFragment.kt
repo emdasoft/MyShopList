@@ -41,12 +41,46 @@ class ShopItemFragment : Fragment() {
 
         viewModelObserve()
 
+        setTextChangedListeners()
+
+    }
+
+    private fun setTextChangedListeners() {
+        binding.teName.addTextChangedListener(object : SimpleTextWatcher() {
+            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+                viewModel.resetErrorNameInput()
+            }
+        })
+
+        binding.teCount.addTextChangedListener(object : SimpleTextWatcher() {
+            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+                viewModel.resetErrorCountInput()
+            }
+        })
     }
 
     private fun viewModelObserve() {
         viewModel.shouldCloseScreen.observe(viewLifecycleOwner) {
             if (it) {
                 requireActivity().supportFragmentManager.popBackStack()
+            }
+        }
+
+        viewModel.showErrorNameInput.observe(viewLifecycleOwner) {
+            if (it) {
+                val message = "name is incorrect"
+                binding.tilName.error = message
+            } else {
+                binding.tilName.error = null
+            }
+        }
+
+        viewModel.showErrorCountInput.observe(viewLifecycleOwner) {
+            if (it) {
+                val message = "count is incorrect"
+                binding.tilCount.error = message
+            } else {
+                binding.tilCount.error = null
             }
         }
     }
