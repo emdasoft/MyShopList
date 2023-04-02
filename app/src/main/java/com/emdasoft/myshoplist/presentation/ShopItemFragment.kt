@@ -1,7 +1,6 @@
 package com.emdasoft.myshoplist.presentation
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -31,7 +30,6 @@ class ShopItemFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        Log.d("screen_mode", screenMode)
         _binding = FragmentShopItemBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -41,24 +39,44 @@ class ShopItemFragment : Fragment() {
 
         launchRightMode()
 
+        viewModelObserve()
+
+    }
+
+    private fun viewModelObserve() {
         viewModel.shouldCloseScreen.observe(viewLifecycleOwner) {
             if (it) {
                 requireActivity().supportFragmentManager.popBackStack()
             }
         }
-
     }
 
     private fun launchRightMode() {
         when (screenMode) {
             MODE_ADD -> launchAddMode()
+            MODE_EDIT -> launchEditMode()
         }
-
     }
 
     private fun launchAddMode() {
         binding.saveButton.setOnClickListener {
             viewModel.addShopItem(binding.teName.text?.toString(), binding.teCount.text?.toString())
+        }
+    }
+
+    private fun launchEditMode() {
+        viewModel.getShopItem(itemId)
+
+        viewModel.shopItemLD.observe(viewLifecycleOwner) {
+            binding.teName.setText(it.name)
+            binding.teCount.setText(it.count.toString())
+        }
+
+        binding.saveButton.setOnClickListener {
+            viewModel.editShopItem(
+                binding.teName.text?.toString(),
+                binding.teCount.text?.toString()
+            )
         }
     }
 
