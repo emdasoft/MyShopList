@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="main_color">#3F51B5</color>
-    <color name="enabled_color">#2196F3</color>
+    <color name="main_color">#FF7400</color>
+    <color name="enabled_color">#FF9640</color>
     <color name="purple_700">#00BCD4</color>
     <color name="teal_200">#FF03DAC5</color>
-    <color name="disabled_color">#5B94C1</color>
+    <color name="disabled_color">#FFB273</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="button_add">#A64B00</color>
+    <color name="reserve">#BF7130</color>
 </resources>

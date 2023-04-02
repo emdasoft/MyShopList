@@ -39,9 +39,14 @@ class ShopListAdapter(val listener: SetOnClickListener) :
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ShopItemViewHolder {
+        val layout = if (viewType == VIEW_TYPE_ENABLE) {
+            R.layout.shop_item_enabled
+        } else {
+            R.layout.shop_item_disabled
+        }
         val view =
             LayoutInflater.from(parent.context).inflate(
-                R.layout.shop_item_enabled,
+                layout,
                 parent,
                 false
             )
@@ -52,6 +57,15 @@ class ShopListAdapter(val listener: SetOnClickListener) :
         return shopList.size
     }
 
+    override fun getItemViewType(position: Int): Int {
+        val item = shopList[position]
+        return if (item.enabled) {
+            VIEW_TYPE_ENABLE
+        } else {
+            VIEW_TYPE_DISABLE
+        }
+    }
+
     override fun onBindViewHolder(holder: ShopItemViewHolder, position: Int) {
         holder.binItem(shopList[position], listener)
     }
@@ -59,5 +73,11 @@ class ShopListAdapter(val listener: SetOnClickListener) :
     interface SetOnClickListener {
         fun onClickListener(shopItem: ShopItem)
         fun onLongClickListener(shopItem: ShopItem)
+    }
+
+    companion object {
+        const val VIEW_TYPE_ENABLE = 1
+        const val VIEW_TYPE_DISABLE = 0
+        const val POOL_SIZE = 15
     }
 }

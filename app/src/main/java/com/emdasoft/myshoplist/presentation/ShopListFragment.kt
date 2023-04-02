@@ -10,6 +10,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.emdasoft.myshoplist.R
 import com.emdasoft.myshoplist.databinding.FragmentShopListBinding
 import com.emdasoft.myshoplist.domain.entity.ShopItem
 
@@ -38,8 +39,19 @@ class ShopListFragment : Fragment(), ShopListAdapter.SetOnClickListener {
 
         setupRecyclerView()
 
+        addButtonClickListener()
+
         viewModel.shopList.observe(viewLifecycleOwner) {
             rvAdapter.shopList = it
+        }
+    }
+
+    private fun addButtonClickListener() {
+        binding.addButton.setOnClickListener {
+            requireActivity().supportFragmentManager.beginTransaction()
+                .replace(R.id.main_container, ShopItemFragment.newInstanceAddMode())
+                .addToBackStack(null)
+                .commit()
         }
     }
 
@@ -53,28 +65,27 @@ class ShopListFragment : Fragment(), ShopListAdapter.SetOnClickListener {
                 )
             rvAdapter = ShopListAdapter(this@ShopListFragment)
             rvShopList.adapter = rvAdapter
+            rvShopList.recycledViewPool.setMaxRecycledViews(
+                ShopListAdapter.VIEW_TYPE_ENABLE,
+                ShopListAdapter.POOL_SIZE
+            )
+            rvShopList.recycledViewPool.setMaxRecycledViews(
+                ShopListAdapter.VIEW_TYPE_DISABLE,
+                ShopListAdapter.POOL_SIZE
+            )
             onSwipeListener()
         }
     }
 
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
-    }
-
-    companion object {
-
-        @JvmStatic
-        fun newInstance() = ShopListFragment()
-    }
-
     override fun onClickListener(shopItem: ShopItem) {
-        Toast.makeText(requireContext(), shopItem.name, Toast.LENGTH_SHORT).show()
+        requireActivity().supportFragmentManager.beginTransaction()
+            .replace(R.id.main_container, ShopItemFragment.newInstanceEditMode(shopItem.id))
+            .addToBackStack(null)
+            .commit()
     }
 
     override fun onLongClickListener(shopItem: ShopItem) {
-
+        viewModel.changeEnabled(shopItem)
     }
 
     private fun onSwipeListener() {
@@ -96,5 +107,16 @@ class ShopListFragment : Fragment(), ShopListAdapter.SetOnClickListener {
         }
         val itemTouchHelper = ItemTouchHelper(callback)
         itemTouchHelper.attachToRecyclerView(binding.rvShopList)
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
+
+    companion object {
+
+        @JvmStatic
+        fun newInstance() = ShopListFragment()
     }
 }
