@@ -14,4 +14,5 @@ interface Repository {
     fun editShopItem(shopItem: ShopItem)
 
     fun getShopItem(itemId: Int): ShopItem
+
 }
