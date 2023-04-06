@@ -1,16 +1,19 @@
 package com.emdasoft.myshoplist.presentation
 
+import android.app.Application
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.emdasoft.myshoplist.data.RepositoryImpl
 import com.emdasoft.myshoplist.domain.entity.ShopItem
 import com.emdasoft.myshoplist.domain.usecases.DeleteShopItemUseCase
 import com.emdasoft.myshoplist.domain.usecases.EditShopItemUseCase
 import com.emdasoft.myshoplist.domain.usecases.GetShopListUseCase
+import kotlinx.coroutines.launch
 
-class MainViewModel : ViewModel() {
+class MainViewModel(application: Application) : AndroidViewModel(application) {
 
-    private val repository = RepositoryImpl
+    private val repository = RepositoryImpl(application)
 
     private val getShopListUseCase = GetShopListUseCase(repository)
     private val deleteShopItemUseCase = DeleteShopItemUseCase(repository)
@@ -22,11 +25,15 @@ class MainViewModel : ViewModel() {
         get() = _shopList
 
     fun deleteShopItem(shopItem: ShopItem) {
-        deleteShopItemUseCase(shopItem)
+        viewModelScope.launch {
+            deleteShopItemUseCase(shopItem)
+        }
     }
 
     fun changeEnabled(shopItem: ShopItem) {
-        val newItem = shopItem.copy(enabled = !shopItem.enabled)
-        editShopItemUseCase(newItem)
+        viewModelScope.launch {
+            val newItem = shopItem.copy(enabled = !shopItem.enabled)
+            editShopItemUseCase(newItem)
+        }
     }
 }

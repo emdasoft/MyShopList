@@ -5,7 +5,7 @@ import com.emdasoft.myshoplist.domain.repository.Repository
 
 class EditShopItemUseCase(private val repository: Repository) {
 
-    operator fun invoke(shopItem: ShopItem) {
+    suspend operator fun invoke(shopItem: ShopItem) {
         repository.editShopItem(shopItem)
     }
 
